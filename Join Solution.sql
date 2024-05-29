@@ -11,7 +11,8 @@ join film_category as fc
 on f.film_id = fc.film_id
 join category as c
 on c.category_id = fc.category_id
-group by c.name;
+group by c.name 
+order by number_of_films desc;
 
 -- 2.Retrieve the store ID, city, and country for each store.
 select * from store;
@@ -57,13 +58,14 @@ group by c.name;
 
 -- Bonus
 -- 5.Identify the film categories with the longest average running time.
-select c.name, avg(f.length) as longest_running_time from film as f
+select c.name, avg(f.length) as average_running_time from film as f
 join film_category as fc
 on f.film_id = fc.film_id
 join category as c
 on c.category_id = fc.category_id
 group by c.name
-having max(f.length) > avg(f.length);
+order by average_running_time desc;
+
 
 
 -- 6. Display the top 10 most frequently rented movies in descending order.
@@ -71,13 +73,14 @@ select * from rental;
 select * from inventory;
 select * from film;
 
-select f.title,r.rental_date
+select f.title,count(distinct r.rental_id) as rentals_num
 from rental as r
 join inventory as i
 on r.inventory_id = i.inventory_id
 join film as f
 on f.film_id =i.film_id
-order by r.rental_date desc
+group by f.title
+order by rentals_num desc
 limit 10;
 
 -- 7.Determine if "Academy Dinosaur" can be rented from Store 1.
